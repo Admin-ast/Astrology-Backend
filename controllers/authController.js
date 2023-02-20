@@ -26,15 +26,12 @@ const register = async (req, res) => {
   const verificationToken = crypto.randomBytes(40).toString("hex");
 
   const user = await User.create({
-    name,
-    email,
-    password,
+    ...req.body,
     role,
     verificationToken,
   });
 
-  console.log("user", user);
-  const origin = "http://localhost:3000";
+  // const origin = "http://localhost:3000";
   // const newOrigin = 'https://react-node-user-workflow-front-end.netlify.app';
 
   // const tempOrigin = req.get('origin');
@@ -51,7 +48,8 @@ const register = async (req, res) => {
   // });
   // send verification token back only while testing in postman!!!
   res.status(StatusCodes.CREATED).json({
-    msg: "Success! Please check your email to verify account",
+    msg: "You are successfully registered!",
+    // msg: "Success! Please check your email to verify account",
   });
 };
 
@@ -192,6 +190,64 @@ const resetPassword = async (req, res) => {
   res.send("reset password");
 };
 
+// get all profile
+const getAllProfile = async (req, res) => {
+  const users = await User.find({});
+  res.status(StatusCodes.OK).json({ users, count: users.length });
+};
+
+const getProfileByEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    throw new CustomError.NotFoundError(`User not found`);
+  }
+
+  res.status(StatusCodes.OK).json({ user });
+};
+
+// get getProfileById
+const getProfileById = async (req, res) => {
+  const { id: userId } = req.params;
+  const user = await User.findOne({ _id: userId });
+
+  if (!user) {
+    throw new CustomError.NotFoundError(`User not found`);
+  }
+
+  res.status(StatusCodes.OK).json({ user });
+};
+
+// update profile
+const updateProfile = async (req, res) => {
+  const { id: userId } = req.params;
+
+  const user = await User.findOneAndUpdate({ _id: userId }, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!user) {
+    throw new CustomError.NotFoundError(`User not found`);
+  }
+
+  res.status(StatusCodes.OK).json({ user });
+};
+
+// delete profile
+const deleteProfile = async (req, res) => {
+  const { id: userId } = req.params;
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    throw new CustomError.NotFoundError(`User not found`);
+  }
+  await user.remove();
+  const users = await User.find({});
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: "Success! User removed.", users, count: users.length });
+};
+
 module.exports = {
   register,
   login,
@@ -199,4 +255,9 @@ module.exports = {
   verifyEmail,
   forgotPassword,
   resetPassword,
+  getAllProfile,
+  getProfileByEmail,
+  getProfileById,
+  updateProfile,
+  deleteProfile,
 };

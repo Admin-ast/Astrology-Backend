@@ -40,6 +40,14 @@ const UserSchema = new mongoose.Schema({
   passwordTokenExpirationDate: {
     type: Date,
   },
+  isPromoted: {
+    type: Boolean,
+    default: false,
+  },
+  wallet: {
+    totalAmount: { type: Number, default: 0 },
+    selfAmount: { type: Number, default: 0 },
+  },
 });
 
 UserSchema.pre("save", async function (next) {
