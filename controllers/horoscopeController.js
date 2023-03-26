@@ -4,18 +4,51 @@ const CustomError = require("../errors");
 var btoa = require("btoa");
 
 const horoscope = async (req, res) => {
-  //   if (!user) {
-  //     throw new CustomError.NotFoundError(`Astrologer not found`);
-  //   }
-  const { zodiacName } = req.params;
-  if (zodiacName) {
+  await fetch(`https://json.astrologyapi.com/v1/sun_sign_prediction/`, {
+    method: "POST",
+    headers: {
+      Authorization:
+        "Basic " + btoa(`${process.env.USER_ID}:${process.env.ACCESS_ID}`),
+    },
+  })
+    .then((data) => data.json())
+    .then((data) => res.status(StatusCodes.OK).json({ msg: "Success!", data }))
+    .catch((err) =>
+      res.status(StatusCodes.BAD_GATEWAY).json({ msg: "facing some issues!" })
+    );
+};
+const getAllHoroscopeDetails = async (req, res) => {
+  const { type } = req.params;
+  if (type) {
     await fetch(
-      `https://json.astrologyapi.com/v1/sun_sign_prediction/daily/${zodiacName}`,
+      `https://json.astrologyapi.com/v1/sun_sign_prediction/${type}`,
       {
         method: "POST",
         headers: {
           Authorization:
-            "Basic " + btoa("622630:d32276c1ff63c7f01a41816f4dabbdd3"),
+            "Basic " + btoa(`${process.env.USER_ID}:${process.env.ACCESS_ID}`),
+        },
+      }
+    )
+      .then((data) => data.json())
+      .then((data) =>
+        res.status(StatusCodes.OK).json({ msg: "Success!", data })
+      )
+      .catch((err) =>
+        res.status(StatusCodes.BAD_GATEWAY).json({ msg: "facing some issues!" })
+      );
+  }
+};
+const getSingleHoroscopeSignDetails = async (req, res) => {
+  const { zodiacName, type } = req.params;
+  if (zodiacName && type) {
+    await fetch(
+      `https://json.astrologyapi.com/v1/sun_sign_prediction/${type}/${zodiacName}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization:
+            "Basic " + btoa(`${process.env.USER_ID}:${process.env.ACCESS_ID}`),
         },
       }
     )
@@ -31,4 +64,6 @@ const horoscope = async (req, res) => {
 
 module.exports = {
   horoscope,
+  getAllHoroscopeDetails,
+  getSingleHoroscopeSignDetails,
 };

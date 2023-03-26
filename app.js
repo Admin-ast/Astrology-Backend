@@ -18,12 +18,9 @@ const mongoSanitize = require("express-mongo-sanitize");
 const connectDB = require("./db/connect");
 
 //  routers
-const authRouter = require("./routes/authRoutes");
-const walletRouter = require("./routes/walletRoutes");
+// const walletRouter = require("./routes/walletRoutes");
 const horoscopeRouter = require("./routes/horoscopeRoutes");
-// const productRouter = require("./routes/productRoutes");
-// const reviewRouter = require("./routes/reviewRoutes");
-// const orderRouter = require("./routes/orderRoutes");
+const kundliRouter = require("./routes/kundliRoutes");
 
 // middleware
 const notFoundMiddleware = require("./middleware/not-found");
@@ -47,12 +44,9 @@ app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.static("./public"));
 app.use(fileUpload());
 
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/transaction", walletRouter);
+// app.use("/api/v1/transaction", walletRouter);
 app.use("/api/v1/horoscope", horoscopeRouter);
-// app.use("/api/v1/products", productRouter);
-// app.use("/api/v1/reviews", reviewRouter);
-// app.use("/api/v1/orders", orderRouter);
+app.use("/api/v1/kundli", kundliRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
@@ -62,7 +56,7 @@ const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
     app.listen(port, () =>
-      console.log(`Server is listening on port ${port}...`)
+      console.log(`Server is listening on port ${process.env.USER_ID}...`)
     );
   } catch (error) {
     console.log(error);

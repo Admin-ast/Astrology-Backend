@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const { horoscope } = require("../controllers/horoscopeController");
+const {
+  horoscope,
+  getSingleHoroscopeSignDetails,
+  getAllHoroscopeDetails,
+} = require("../controllers/horoscopeController");
 
-router.get("/:zodiacName", horoscope);
-router.get("/", (req, res) => {
-  res.json({ msg: "working" });
-});
+router.get("/", horoscope);
+router.get("/:type", getAllHoroscopeDetails);
+router.get("/:type/:zodiacName", getSingleHoroscopeSignDetails);
 
 module.exports = router;

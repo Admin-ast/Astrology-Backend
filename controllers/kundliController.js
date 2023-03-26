@@ -1,79 +1,58 @@
-const HeroBanner = require("../models/Banner");
 const { StatusCodes } = require("http-status-codes");
-const Product = require("../models/Banner");
-const Multiplefile = require("../models/Multiplefile");
+const CustomError = require("../errors");
+const Kundli = require("../models/Kundli");
 
-const fs = require("fs");
+var btoa = require("btoa");
 
-const cloudinary = require("cloudinary").v2;
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDNARY_CLOUD_NAME,
-  api_key: process.env.CLOUDNARY_API_KEY,
-  api_secret: process.env.CLOUDNARY_API_SECRET,
-});
-
-const uploads = async (file) => {
-  return new Promise((resolve) => {
-    cloudinary.uploader.upload(file, (err, res) => {
-      if (err) return res.status(500).send("upload image error");
-      resolve({
-        fileName: res.original_filename,
-        filePath: res?.secure_url,
-        fileType: res?.format,
-        cloudinary_id: res?.public_id,
-      });
-    });
-  });
+const newKundli = async (req, res) => {
+  await fetch(`https://json.astrologyapi.com/v1/sun_sign_prediction/`, {
+    method: "POST",
+    headers: {
+      Authorization:
+        "Basic " + btoa(`${process.env.USER_ID}:${process.env.ACCESS_ID}`),
+    },
+    body: JSON.stringify(req),
+  })
+    .then((data) => data.json())
+    .then((data) => {
+      Kundli.create({ ...data, type: "kundli" });
+      res.status(StatusCodes.OK).json({ msg: "Success!", data });
+    })
+    .catch((err) =>
+      res.status(StatusCodes.BAD_GATEWAY).json({ msg: "facing some issues!" })
+    );
 };
 
-const heroBanner = async (req, res) => {
-  const uploader = async (path) => await uploads(path, "Images");
+const kundliMatching = async (req, res) => {
+  await fetch(`https://json.astrologyapi.com/v1/sun_sign_prediction/`, {
+    method: "POST",
+    headers: {
+      Authorization:
+        "Basic " + btoa(`${process.env.USER_ID}:${process.env.ACCESS_ID}`),
+    },
+    body: JSON.stringify(req),
+  })
+    .then((data) => data.json())
+    .then((data) => {
+      Kundli.create({ ...data, type: "matching" });
+      res.status(StatusCodes.OK).json({ msg: "Success!", data });
+    })
+    .catch((err) =>
+      res.status(StatusCodes.BAD_GATEWAY).json({ msg: "facing some issues!" })
+    );
+};
 
-  let filesArray = [];
-  let files = req.files;
-  for (const file of files) {
-    const { path } = file;
-    const newPath = await uploader(path);
-    filesArray.push(newPath);
-    fs.unlinkSync(path);
+const getSavedKundliDetails = async (req, res) => {
+  const { type } = req.params;
+  const kundliDetail = Kundli.find({ type });
+  if (kundliDetail) {
+    return res.status(StatusCodes.OK).json({ msg: "Success!", kundliDetail });
   }
-  req.body.image = filesArray;
-  const bannerAdd = await HeroBanner.create(req.body);
-  res
-    .status(StatusCodes.CREATED)
-    .json({ msg: "Banner has been added successfully !" });
+  res.status(StatusCode.NOT_FOUND).json({ msg: "Nothing available" });
 };
 
-const getHeroBanner = async (req, res) => {
-  const heroBanner = await HeroBanner.find({ status: "active" });
-  //   res.send(heroBanner);
-  res.status(StatusCodes.OK).json(heroBanner);
+module.exports = {
+  newKundli,
+  kundliMatching,
+  getSavedKundliDetails,
 };
-
-const deleteHeroBanner = async (req, res) => {
-  const { id } = req.params;
-  const uploader = async (path) => await uploads(path, "Images");
-
-  const product = await Product.findOne({ id });
-  const images = await HeroBanner.findOne({ id });
-
-  let files = images?.files;
-  if (files) {
-    for (const file of files) {
-      const { cloudinary_id } = file;
-      // console.log(path);
-      await uploader.destroy(cloudinary_id);
-    }
-  }
-  await images?.remove();
-  if (!product) {
-    throw new CustomError.NotFoundError(`No banner found`);
-  }
-
-  await product?.remove();
-
-  res.status(StatusCodes.OK).json({ msg: "Success! Banner removed." });
-};
-
-module.exports = { getHeroBanner, heroBanner, deleteHeroBanner };
