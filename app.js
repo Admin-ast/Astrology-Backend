@@ -21,6 +21,7 @@ const connectDB = require("./db/connect");
 // const walletRouter = require("./routes/walletRoutes");
 const horoscopeRouter = require("./routes/horoscopeRoutes");
 const kundliRouter = require("./routes/kundliRoutes");
+const userAuthRouter = require("./routes/userAuthRoutes");
 
 // middleware
 const notFoundMiddleware = require("./middleware/not-found");
@@ -47,6 +48,7 @@ app.use(fileUpload());
 // app.use("/api/v1/transaction", walletRouter);
 app.use("/api/v1/horoscope", horoscopeRouter);
 app.use("/api/v1/kundli", kundliRouter);
+app.use("/api/v1/auth", userAuthRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
