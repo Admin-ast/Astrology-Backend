@@ -1,5 +1,4 @@
 const { StatusCodes } = require("http-status-codes");
-const CustomError = require("../errors");
 const Kundli = require("../models/Kundli");
 
 var btoa = require("btoa");

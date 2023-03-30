@@ -1,6 +1,6 @@
 const Twilio = require("twilio");
 const accountSid = "ACb11e2496bbb52584407c81c1e77f1d82";
-const authToken = "cd9847ec1cde3270f12c2f9b7aed87a7";
+const authToken = "98d1d462a7d8eb4e53abd87a7d19b985";
 const verifySid = "VA5f1c1dbb49fef2a0c8942e482148b12f";
 
 const client = require("twilio")(accountSid, authToken);

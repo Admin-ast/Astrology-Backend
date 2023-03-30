@@ -22,6 +22,8 @@ const connectDB = require("./db/connect");
 const horoscopeRouter = require("./routes/horoscopeRoutes");
 const kundliRouter = require("./routes/kundliRoutes");
 const userAuthRouter = require("./routes/userAuthRoutes");
+const candidateRouter = require("./routes/candidateRouts");
+const otpRouter = require("./routes/otpRoutes");
 
 // middleware
 const notFoundMiddleware = require("./middleware/not-found");
@@ -49,6 +51,8 @@ app.use(fileUpload());
 app.use("/api/v1/horoscope", horoscopeRouter);
 app.use("/api/v1/kundli", kundliRouter);
 app.use("/api/v1/auth", userAuthRouter);
+app.use("/api/v1/astrologer", candidateRouter);
+app.use("/api/v1", otpRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
