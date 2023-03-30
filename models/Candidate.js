@@ -14,7 +14,7 @@ const candidateSchema = new mongoose.Schema({
   },
   skillDetails: {},
   otherDetails: {},
-  assignmentDetail: {},
+  assignmentDetails: {},
   // dateOfBirth: {
   //   type: Date,
   // },

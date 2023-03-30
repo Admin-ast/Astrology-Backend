@@ -1,9 +1,9 @@
 const express = require("express");
 
 const router = express.Router();
-const { userLogin, verifyOtp } = require("../controllers/userAuthController");
+const { userLogin, userUpdate } = require("../controllers/userAuthController");
 
 router.post("/sign-in", userLogin);
-router.post("/verify-otp", verifyOtp);
+router.put("/profile-update", userUpdate);
 
 module.exports = router;

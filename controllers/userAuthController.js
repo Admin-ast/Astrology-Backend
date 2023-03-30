@@ -1,40 +1,31 @@
 const User = require("../models/User");
-const {
-  createOtpService,
-  verifyOtpService,
-} = require("../services/otp-service");
+const { StatusCodes } = require("http-status-codes");
 
 const userLogin = async (req, res) => {
-  const { mobileNumber, name } = req.body;
-
-  console.log("mon", req.body);
-
-  createOtpService(mobileNumber);
-  res
-    .status(201)
-    .json({ msg: "Otp has been sent successfully on your mobile number" });
-};
-const verifyOtp = async (req, res) => {
-  const { otp, mobileNumber, name } = req.body;
-  const response = await verifyOtpService(mobileNumber, otp);
-
-  console.log("hello", response);
-  const existingUser = await User.findOne({ mobileNumber });
-  let user;
-
-  if (response === "approved") {
-    if (!existingUser) {
-      user = await User.create({ mobileNumber, name });
-    } else {
-      user = await User.find({ mobileNumber });
-    }
-    res.status(201).json({ msg: "Otp verified successfully", user });
-  } else {
-    res.status(401).json({ msg: "Otp verification failed" });
+  const { mobileNumber } = req.body;
+  const user = await User.findOne({ mobileNumber });
+  if (!user) {
+    const user = await User.create(req.body);
+    return res
+      .status(201)
+      .json({ msg: "login successfully", user, existingUser: false });
   }
+  res.status(201).json({ msg: "login successfully", user, existingUser: true });
+};
+
+const userUpdate = async (req, res) => {
+  const { mobileNumber } = req.body;
+  const user = await User.findOneAndUpdate({ mobileNumber }, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!user) {
+    throw new CustomError.NotFoundError(`User not found`);
+  }
+  res.status(StatusCodes.OK).json({ user, msg: "updated successfully" });
 };
 
 module.exports = {
   userLogin,
-  verifyOtp,
+  userUpdate,
 };
