@@ -53,6 +53,9 @@ app.use("/api/v1/kundli", kundliRouter);
 app.use("/api/v1/auth", userAuthRouter);
 app.use("/api/v1/astrologer", candidateRouter);
 app.use("/api/v1", otpRouter);
+app.use("/api/v1", (req, res) => {
+  res.json({ msg: "recent deployment works!" });
+});
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
