@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const Kundli = require("../models/Kundli");
+const { useFetcher } = require("../services/useFetcher");
 
 var btoa = require("btoa");
 
@@ -50,8 +51,32 @@ const getSavedKundliDetails = async (req, res) => {
   res.status(StatusCode.NOT_FOUND).json({ msg: "Nothing available" });
 };
 
+const getPlanetDetails = async (req, res) => {
+  const bodyData = req.body;
+  const url = "/planets";
+  const response = await useFetcher(url, bodyData);
+  return res.status(StatusCodes.OK).json({ msg: "Success!", response });
+};
+
+const getKPPlanetDetails = async (req, res) => {
+  const bodyData = req.body;
+  const url = "/kp_planets";
+  const response = await useFetcher(url, bodyData);
+  return res.status(StatusCodes.OK).json({ msg: "Success!", response });
+};
+
+const getKPHouseCuspsDetails = async (req, res) => {
+  const bodyData = req.body;
+  const url = "/kp_house_cusps";
+  const response = await useFetcher(url, bodyData);
+  return res.status(StatusCodes.OK).json({ msg: "Success!", response });
+};
+
 module.exports = {
   newKundli,
   kundliMatching,
   getSavedKundliDetails,
+  getPlanetDetails,
+  getKPPlanetDetails,
+  getKPHouseCuspsDetails,
 };
