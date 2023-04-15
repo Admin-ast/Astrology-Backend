@@ -72,6 +72,20 @@ const getKPHouseCuspsDetails = async (req, res) => {
   return res.status(StatusCodes.OK).json({ msg: "Success!", response });
 };
 
+const getAvakhadaDetails = async (req, res) => {
+  const bodyData = req.body;
+  const url = "/astro_details";
+  const response = await useFetcher(url, bodyData);
+  return res.status(StatusCodes.OK).json({ msg: "Success!", response });
+};
+
+const getBirthDetails = async (req, res) => {
+  const bodyData = req.body;
+  const url = "/birth_details";
+  const response = await useFetcher(url, bodyData);
+  return res.status(StatusCodes.OK).json({ msg: "Success!", response });
+};
+
 module.exports = {
   newKundli,
   kundliMatching,
@@ -79,4 +93,6 @@ module.exports = {
   getPlanetDetails,
   getKPPlanetDetails,
   getKPHouseCuspsDetails,
+  getAvakhadaDetails,
+  getBirthDetails,
 };

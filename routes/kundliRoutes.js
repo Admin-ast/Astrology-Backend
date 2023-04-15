@@ -8,6 +8,8 @@ const {
   getPlanetDetails,
   getKPPlanetDetails,
   getKPHouseCuspsDetails,
+  getAvakhadaDetails,
+  getBirthDetails,
 } = require("../controllers/kundliController");
 
 router.post("/new-kundli", newKundli);
@@ -16,5 +18,7 @@ router.get("/:type", getSavedKundliDetails);
 router.post("/planets", getPlanetDetails);
 router.post("/kp_planets", getKPPlanetDetails);
 router.post("/kp_house_cusps", getKPHouseCuspsDetails);
+router.post("/avakhadaDetails", getAvakhadaDetails);
+router.post("/birthDetails", getBirthDetails);
 
 module.exports = router;
