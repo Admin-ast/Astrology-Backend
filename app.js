@@ -28,13 +28,15 @@ const otpRouter = require("./routes/otpRoutes");
 // middleware
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
-const https = require("https");
-const fs = require("fs");
-const https_options = {
-  ca: fs.readFileSync("ca_bundle.crt"),
-  key: fs.readFileSync("private.key"),
-  cert: fs.readFileSync("certificate.crt"),
-};
+// const https = require("https");
+// const fs = require("fs");
+// const https_options = {
+//   ca: fs.readFileSync("ca_bundle.crt"),
+//   key: fs.readFileSync("private.key"),
+//   cert: fs.readFileSync("certificate.crt"),
+// };
+
+// console.log(fs.readFileSync("ca_bundle.crt"));
 
 app.set("trust proxy", 1);
 app.use(
@@ -73,10 +75,10 @@ const port = process.env.PORT || 8000;
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
-    await https.createServer(https_options, function (req, res) {
-      res.writeHead(200);
-      res.end("Welcome to Node.js HTTPS Server");
-    });
+    // await https.createServer(https_options, function (req, res) {
+    //   res.writeHead(200);
+    //   res.end("Welcome to Node.js HTTPS Server");
+    // });
 
     app.listen(port, () =>
       console.log(`Server is listening on port ${process.env.USER_ID}...`)
