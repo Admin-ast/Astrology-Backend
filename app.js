@@ -73,7 +73,7 @@ const port = process.env.PORT || 8000;
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
-    https.createServer(https_options, function (req, res) {
+    await https.createServer(https_options, function (req, res) {
       res.writeHead(200);
       res.end("Welcome to Node.js HTTPS Server");
     });
