@@ -47,6 +47,7 @@ app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.static("./public"));
 app.use(fileUpload());
 app.use("*", cors({ credentials: false, origin: "http://localhost:3000" }));
+app.use("*", cors({ credentials: false, origin: "https://astrosevatalk.com" }));
 
 // app.use("/api/v1/transaction", walletRouter);
 app.use("/api/v1/horoscope", horoscopeRouter);
