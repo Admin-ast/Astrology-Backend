@@ -28,15 +28,13 @@ const otpRouter = require("./routes/otpRoutes");
 // middleware
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
-// const https = require("https");
-// const fs = require("fs");
-// const https_options = {
-//   ca: fs.readFileSync("./ca_bundle.crt"),
-//   key: fs.readFileSync("./private.key"),
-//   cert: fs.readFileSync("./certificate.crt"),
-// };
+const https = require("https");
+const fs = require("fs");
 
-// console.log(fs.readFileSync("ca_bundle.crt"));
+const https_options = {
+  key: fs.readFileSync("./api.astrosevatalk.key"),
+  cert: fs.readFileSync("./api.astrosevatalk.pem"),
+};
 
 app.set("trust proxy", 1);
 app.use(
@@ -75,15 +73,14 @@ const port = process.env.PORT || 8000;
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
-    // https
-    //   .createServer(https_options, app)
-    //   .listen(port, () =>
-    //     console.log(`Server is listening on port ${process.env.USER_ID}...`)
-    //   );
-
-    app.listen(port, () =>
-      console.log(`Server is listening on port ${process.env.USER_ID}...`)
-    );
+    https
+      .createServer(https_options, app)
+      .listen(port, () =>
+        console.log(`Server is listening on port ${port}...`)
+      );
+    // app.listen(port, () =>
+    //   console.log(`Server is listening on port ${process.env.USER_ID}...`)
+    // );
   } catch (error) {
     console.log(error);
   }
