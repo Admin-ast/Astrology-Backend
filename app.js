@@ -31,10 +31,10 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 const https = require("https");
 const fs = require("fs");
 
-const https_options = {
-  key: fs.readFileSync("./api.astrosevatalk.key"),
-  cert: fs.readFileSync("./api.astrosevatalk.pem"),
-};
+// const https_options = {
+//   key: fs.readFileSync("./api.astrosevatalk.key"),
+//   cert: fs.readFileSync("./api.astrosevatalk.pem"),
+// };
 
 app.set("trust proxy", 1);
 app.use(
@@ -73,14 +73,14 @@ const port = process.env.PORT || 8000;
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
-    https
-      .createServer(https_options, app)
-      .listen(port, () =>
-        console.log(`Server is listening on port ${port}...`)
-      );
-    // app.listen(port, () =>
-    //   console.log(`Server is listening on port ${process.env.USER_ID}...`)
-    // );
+    // https
+    //   .createServer(https_options, app)
+    //   .listen(port, () =>
+    //     console.log(`Server is listening on port ${port}...`)
+    //   );
+    app.listen(port, () =>
+      console.log(`Server is listening on port ${process.env.USER_ID}...`)
+    );
   } catch (error) {
     console.log(error);
   }
