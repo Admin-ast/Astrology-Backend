@@ -32,8 +32,8 @@ const https = require("https");
 const fs = require("fs");
 
 const https_options = {
-  key: fs.readFileSync("/etc/nginx/ssl/api.astrosevatalk.com.key"),
-  cert: fs.readFileSync("/etc/nginx/ssl/api.astrosevatalk.com.pem"),
+  key: fs.readFileSync("./private.key"),
+  cert: fs.readFileSync("./certificate.pem"),
 };
 
 app.set("trust proxy", 1);
