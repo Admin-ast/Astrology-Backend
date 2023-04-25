@@ -21,6 +21,7 @@ const connectDB = require("./db/connect");
 // const walletRouter = require("./routes/walletRoutes");
 const horoscopeRouter = require("./routes/horoscopeRoutes");
 const kundliRouter = require("./routes/kundliRoutes");
+const panchangRouter = require("./routes/panchangRoutes");
 const userAuthRouter = require("./routes/userAuthRoutes");
 const candidateRouter = require("./routes/candidateRouts");
 const otpRouter = require("./routes/otpRoutes");
@@ -53,12 +54,13 @@ app.use(cookieParser(process.env.JWT_SECRET));
 
 app.use(express.static("./public"));
 app.use(fileUpload());
-// app.use("*", cors({ credentials: false, origin: "http://localhost:3000" }));
-app.use("*", cors({ credentials: false, origin: "https://astrosevatalk.com" }));
+app.use("*", cors({ credentials: false, origin: "http://localhost:3000" }));
+// app.use("*", cors({ credentials: false, origin: "https://astrosevatalk.com" }));
 
 // app.use("/api/v1/transaction", walletRouter);
 app.use("/api/v1/horoscope", horoscopeRouter);
 app.use("/api/v1/kundli", kundliRouter);
+app.use("/api/v1/panchang", panchangRouter);
 app.use("/api/v1/auth", userAuthRouter);
 app.use("/api/v1/astrologer", candidateRouter);
 app.use("/api/v1", otpRouter);
@@ -73,14 +75,14 @@ const port = process.env.PORT || 8000;
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
-    https
-      .createServer(https_options, app)
-      .listen(port, () =>
-        console.log(`Server is listening on port ${port}...`)
-      );
-    // app.listen(port, () =>
-    //   console.log(`Server is listening on port ${process.env.USER_ID}...`)
-    // );
+    // https
+    //   .createServer(https_options, app)
+    //   .listen(port, () =>
+    //     console.log(`Server is listening on port ${port}...`)
+    //   );
+    app.listen(port, () =>
+      console.log(`Server is listening on port ${process.env.USER_ID}...`)
+    );
   } catch (error) {
     console.log(error);
   }

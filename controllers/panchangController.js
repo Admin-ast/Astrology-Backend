@@ -1,6 +1,19 @@
 const { StatusCodes } = require("http-status-codes");
-const CustomError = require("../errors");
+const { useFetcher } = require("../services/useFetcher");
 
-var btoa = require("btoa");
+const basicPanchang = async (req, res) => {
+  const bodyData = req.body;
+  console.log("req", req.body);
+  const url = "/basic_panchang";
+  const response = await useFetcher(url, bodyData);
+  return res.status(StatusCodes.OK).json({ msg: "Success!", response });
+};
+const ashubhaMuhurat = async (req, res) => {
+  const bodyData = req.body;
+  console.log("req", req.body);
+  const url = "/advanced_panchang/sunrise";
+  const response = await useFetcher(url, bodyData);
+  return res.status(StatusCodes.OK).json({ msg: "Success!", response });
+};
 
-module.exports = {};
+module.exports = { basicPanchang, ashubhaMuhurat };
