@@ -13,16 +13,16 @@ const createOtp = async (req, res) => {
     .json({ msg: "Otp has been sent successfully on your mobile number" });
 };
 
-const verifyOtp = async (req, res) => {
-  const { otp, mobileNumber } = req.body;
+const verifyOtp = async (mobileNumber, otp) => {
+  // const { otp, mobileNumber } = req.body;
   const response = await verifyOtpService(mobileNumber, otp);
 
   console.log("hello", response);
 
   if (response === "approved") {
-    res.status(201).json({ msg: "Otp verified successfully" });
+    return { otpVerified: true };
   } else {
-    res.status(401).json({ msg: "Otp verification failed" });
+    return { otpVerified: false };
   }
 };
 
