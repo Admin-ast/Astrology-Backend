@@ -10,7 +10,6 @@ const userLogin = async (req, res) => {
     return res.status(401).json({ msg: "OTP is required" });
   }
   const otpVerification = await verifyOtp(mobileNumber, otp);
-  console.log(otpVerification);
   if (otpVerification && otpVerification.otpVerified) {
     if (!user) {
       const user = await User.create(req.body);
@@ -22,7 +21,6 @@ const userLogin = async (req, res) => {
         .status(200)
         .json({ msg: "login successfully", user, existingUser: false });
     }
-    console.log(res["cookie"]);
     attachCookiesToResponse({
       res,
       payload: { user: user },
