@@ -170,7 +170,7 @@ const updateTimeTable = async(req, res) => {
 
 const autoBoost = async(req, res) => {
   
-        const astrologerid =  "6525357030f1240ebc979f10";   //JWToken.getastrologerid(req);
+        const astrologerid =  JWToken.getastrologerid(req);
          const element = req.body.autoBoost;
        
          let autoboost = await Candidate.findById(astrologerid).select('autoBoost');  
@@ -192,14 +192,14 @@ const autoBoost = async(req, res) => {
 
                     await Candidate.findByIdAndUpdate(astrologerid,{
                 autoBoost:autoboostelemts
-          });
+          }); 
 
          res.status(200).json({status:true, message:"Successfully updated"});
 }
 
 
 const getautoBoost = async(req,res) => {
-      const astrologerid = "6525357030f1240ebc979f10"; //JWToken.getastrologerid(req);
+      const astrologerid = JWToken.getastrologerid(req);
 
       const autoboost = await Candidate.findById(astrologerid).select('autoBoost');
 
@@ -208,7 +208,18 @@ const getautoBoost = async(req,res) => {
        res.status(200).json({status:true, res:boost, message:"Successfully"});
 }
 
+const getfields = async(req,res) => {
+      const boost= await Candidate.findByIdAndUpdate(req.params.id,{
+         name:req.body.name,
+         emailId:req.body.emailId,
+         mobileNumber:req.body.mobileNumber,
+         callCharges:req.body.callCharges,
+         chatCharges:req.body.chatCharges,
+         
+      });
 
+      res.status(200).json({status:true, res:boost});
+}
 const getAdmin = async(req, res) => {
       const astrologerid = JWToken.getastrologerid(req);
 
@@ -221,6 +232,7 @@ const updaterate = async(req,res) => {
 
     return res.status(200).json({status:true,message:"Successfully updated rate"});
 }
+
 
 const uploadImage = async(req,res) => {
       console.log(req.files[0].filename);
@@ -294,4 +306,4 @@ const deleteCandidate = async(req,res) => {
     );
 }
 
-module.exports = { createCandidate, login, bearertoken, getallCandidate, getliveCandidate, getCandidate, updateStatus, updateTimeTable,  uploadImage, uploadGalleryImage, dpImage,  deleteCandidate, updaterate, getautoBoost, autoBoost,ceomessage };
+module.exports = { createCandidate, login, bearertoken, getallCandidate, getliveCandidate, getCandidate, getfields, updateStatus, updateTimeTable,  uploadImage, uploadGalleryImage, dpImage,  deleteCandidate, updaterate, getautoBoost, autoBoost,ceomessage };
